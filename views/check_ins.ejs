@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/plugins/daterangepicker.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- vendor css -->
+    <title></title>
+    <style>
+            .highlight {
+        animation: highlightAnimation 10s ease infinite;
+      }
+
+      @keyframes highlightAnimation {
+        0%, 100% {
+          background-color: transparent;
+        }
+        50% {
+          background-color: rgb(212, 237, 218);
+        }
+      }
+    </style>
+  </head>
+  <body class="font-Poppins">
+    <!-- Header -->
+    <header>
+      <nav class="container flex items-center py-4 mt-4 sm:mt-12">
+        <div class="py-1"></div>
+      
+        <!-- Dropdown menu -->
+        <div class="relative ml-auto sm:hidden">
+          <button type="button" class="flex items-center text-bookmark-blue focus:outline-none" onclick="toggleDropdown()">
+            <i class="text-2xl fas fa-bars"></i>
+          </button>
+          <ul class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg hidden" id="dropdownMenu">
+            <li class="cursor-pointer py-2 px-4 hover:bg-gray-200"><a href="/check_outs">CheckOutS</a></li>
+            <li class="cursor-pointer py-2 px-4 hover:bg-gray-200"><a href="/check_ins">CheckInS</a></li>
+            <li class="cursor-pointer py-2 px-4 hover:bg-gray-200"><a href="/dashboard">Dashboard</a></li>
+            <li class="text-bookmark-red cursor-pointer py-2 px-4 hover:bg-gray-200"><a href="/logout">logout</a></li>
+          </ul>
+        </div>
+      
+        <!-- Menu items -->
+        <ul class="hidden sm:flex flex-1 justify-end items-center gap-12 text-bookmark-blue uppercase text-xs" id="menuItems">
+          <li class="cursor-pointer"><a href="/check_outs">CheckOutS</a></li>
+          <li class="cursor-pointer"><a href="/check_ins">CheckInS</a></li>
+          <li class="cursor-pointer"><a href="/logout">Logout</a></li>
+          <li class="cursor-pointer py-2 px-4 hover:bg-gray-200"><a href="/logout" class="text-bookmark-red"></a></li>
+        </ul>
+      </nav>
+    </header>
+
+
+
+
+    <!-- FAQ -->
+<section class="bg-bookmark-white py-20">
+<div class="container">
+  <div class="lg:w-2/4 mx-auto py-8 px-6 bg-white rounded-xl">
+    <h1 class="font-bold text-5xl text-center mb-8">Employee check in list</h1>
+    <!-- <div class="row">
+      <div class="col-md-6">
+				<div class="card">
+					<div class="card-header">
+						<h5>Simple Date Range Picker With a Callback</h5>
+					</div>
+					<div class="card-body">
+						<input type="text" name="daterange" class="form-control" value="08/01/2023 - 08/15/2023" />
+					</div>
+				</div>
+			</div>
+    </div> -->
+    <hr>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h5>Select Date Range Dalin</h5>
+          </div>
+          <div class="card-body">
+            <input type="text" name="daterange" id="date-range" class="form-control" />
+            <button onclick="generateCSV()" type="button" class="bg-sky-500/75 mt-12 flex self-center btn btn-purple hover:bg-bookmark-white hover:text-black justify-center">Export to CSV test</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <button id="toggleSoundButton" class="bg-blue-500 text-white py-2 px-4 rounded-lg">
+      Activate Sound
+    </button>
+    <!-- <button onclick="generate_checkin_CSV()" type="submit" class="bg-sky-500/75 mt-12 flex self-center btn btn-purple hover:bg-bookmark-white hover:text-black justify-center">
+      Export to CSV
+    </button> -->
+    <br>
+    <br>
+    <hr>
+
+    <hr>
+    <br>
+    <br>
+   
+  </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+    // function generate_checkin_CSV() {
+    //     window.location.href = '/generate_checkin_csv';
+    //   }
+
+        function formatDate(dateString) {
+        const [month, day, year] = dateString.split('/');
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      }
+
+      function generateCSV() {
+        const dateRange = $('#date-range').val();
+        const [startDate, endDate] = dateRange.split(' - ');
+
+        const formattedStartDate = formatDate(startDate);
+        const formattedEndDate = formatDate(endDate);
+
+        console.log('Generating CSV for Date Range:', formattedStartDate, 'to', formattedEndDate);
+
+        // Redirect to the backend route with the selected date range as query parameters
+        window.location.href = `/generate_checkin_csv?start=${formattedStartDate}&end=${formattedEndDate}`;
+      }
+
+  function toggleDropdown() {
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    dropdownMenu.classList.toggle('hidden');
+  }
+</script>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+
+      // JavaScript section
+    const toggleSoundButton = document.getElementById('toggleSoundButton');
+    let soundEnabled = false;
+
+    toggleSoundButton.addEventListener('click', () => {
+      soundEnabled = !soundEnabled; // Toggle the sound state
+      toggleSoundButton.textContent = soundEnabled ? 'Sound On' : 'Sound Off';
+    });
+
+
+
+    socket.on('chatMessage', (data) => {
+          // Extract data from the socket event
+          const userId = data.userId;
+          const userName = data.userName;
+          const checkInDate = data.checkInDate || ''; // Handle null value
+          const checkInTime = data.checkInTime || ''; // Handle null value
+
+          console.log("userId: ",userId);
+          console.log("userName: ",userName);
+          console.log("checkInDate: ",checkInDate);
+          console.log("checkInTime: ",checkInTime);
+
+          // Get the table body by its ID
+          const tableBody = document.getElementById('table-body');
+
+          // Find and remove the existing <tr> element with the matching user ID
+          const existingRow = document.getElementById(userId);
+          if (existingRow) {
+            console.log("delete div: ", existingRow)
+            tableBody.removeChild(existingRow);
+          }
+
+          // Create a new <tr> element
+          const newRow = document.createElement('tr');
+          newRow.id = userId; // Set the ID based on the user's ID
+
+          // Add the 'highlight' class to the new check-in element
+          newRow.classList.add('highlight');
+
+          // Create table data cells and populate them with data
+          const userNameCell = document.createElement('td');
+          userNameCell.textContent = userName;
+
+          const statusCell = document.createElement('td');
+          statusCell.innerHTML = '<a href="#!" class="btn btn-success btn-sm">Present</a>';
+
+          const dateCell = document.createElement('td');
+          dateCell.textContent = checkInDate;
+
+          const checkInCell = document.createElement('td');
+          checkInCell.textContent = checkInTime;
+
+          const checkOutCell = document.createElement('td');
+          checkOutCell.textContent = ''; // Initialize as empty
+
+          const hoursCell = document.createElement('td');
+          hoursCell.textContent = ''; // Initialize as empty
+
+          // Append the cells to the new row
+          newRow.appendChild(userNameCell);
+          newRow.appendChild(statusCell);
+          newRow.appendChild(dateCell);
+          newRow.appendChild(checkInCell);
+          newRow.appendChild(checkOutCell);
+          newRow.appendChild(hoursCell);
+
+          // Prepend the new row to the table body
+          tableBody.insertBefore(newRow, tableBody.firstChild);
+
+           // Play the sound only if sound is enabled
+           if (soundEnabled) {
+            playCheckinSound();
+          }
+
+           // After 3 seconds, remove the 'highlight' class
+           setTimeout(() => {
+            checkInDiv.classList.remove('highlight');
+          }, 3000);
+
+        });
+
+
+        function playCheckinSound() {
+        const audio = document.getElementById('checkinAudio');
+        const audioSource = '/sounds/notify_bell.wav'; // Update with the actual path
+
+        audio.muted = false;
+        audio.src = audioSource;
+        audio.currentTime = 0;
+        audio.play();
+      }
+
+</script>
+
+<audio id="checkinAudio" muted>
+  <source src="" type="audio/wav">
+</audio>
+
+ <!-- Required Js -->
+ <script src="assets/js/vendor-all.min.js"></script>
+ <script src="assets/js/plugins/bootstrap.min.js"></script>
+ <script src="assets/js/ripple.js"></script>
+ <script src="assets/js/pcoded.min.js"></script>
+<script src="assets/js/menu-setting.min.js"></script>
+
+<!-- datepicker js -->
+<script src="assets/js/plugins/moment.min.js"></script>
+<script src="assets/js/plugins/daterangepicker.js"></script>
+<script src="assets/js/pages/ac-datepicker.js"></script>
+</footer>
+<audio id="checkinAudio" muted>
+  <source src="" type="audio/wav">
+</audio>
+
+
+ <!-- [ Main Content ] start -->
+ <div class="row">
+   
+  <!-- customar project  start -->
+  <div class="col-xl-12">
+    <div style="padding-top: 20px; margin-top: 20px;" class="card">
+      <div class="col-md-3 col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row align-items-center m-l-0">
+                    <div class="col-auto">
+                        <i class="icon feather icon-users f-30 text-c-red"></i>
+                    </div>
+                    <div class="col-auto">
+                        <h6 class="text-muted m-b-10">Total Check-in</h6>
+                        <h2 class="m-b-0"><%= dataToSend.check_in_count %></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+      <div class="card-body">
+        <div class="row align-items-center m-l-0">
+          <div class="col-sm-6">
+          </div>
+          <div class="col-sm-6 text-right">
+            <button class="btn btn-success btn-sm btn-round has-ripple" data-toggle="modal" data-target="#modal-report">DL-Register v3.0</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table id="report-table" class="table table-bordered table-striped mb-0">
+            <thead>
+              <tr>
+                <th>Today</th>
+              </tr>
+              <tr>
+                <th>User</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Hours</th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <% if (dataToSend && dataToSend.new_query_results) { %>
+                <% for (let i = 0; i < dataToSend.new_query_results.length; i++) { %>
+                  <tr id="<%= dataToSend.new_query_results[i].id %>">
+                    <td><%= dataToSend.new_query_results[i].user_name %></td>
+                    <td> <% if (dataToSend.new_query_results[i].check_in !== 'Absent') { %>
+                      <a href="#!" class="btn btn-success btn-sm btn-success">Present</a>
+                    <% } else { %>
+                      <a href="#!" class="btn btn-info btn-sm btn-danger">Absent</a>
+                    <% } %></td>
+                    <td>
+                      <% if (dataToSend.new_query_results[i].check_in === 'Absent') { %>
+                        <%= new Date().toISOString().slice(0, 10) %>
+                      <% } else { %>
+                        <%= dataToSend.new_query_results[i].check_in %>
+                      <% } %>
+                    </td>
+                    <td>
+                      <% if (dataToSend.new_query_results[i].check_in !== 'Absent') { %>
+                        <%= dataToSend.new_query_results[i].check_in %>
+                      <% }  %>
+                    </td>
+                    <td>
+                      <% if (dataToSend.new_query_results[i].check_out !== null) { %>
+                        <%= dataToSend.new_query_results[i].check_out.toLocaleTimeString('en-US', { hour12: false }) %>
+                      <% } %>
+                    </td>                  
+                    <td>
+                      <% if (dataToSend.new_query_results[i].total_hours !== '') { %>
+                        <a href="#!" class="btn btn-info btn-sm"><%= dataToSend.new_query_results[i].total_hours %> hours</a>
+                      <% } %>
+                    </td>                    
+                  </tr>
+                <% } %>
+              <% } else { %>
+                <tr>
+                  <td colspan="5">No data available</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>          
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- customar project  end -->
+</div>
+<!-- [ Main Content ] end -->
+
+
+
+
+
+</body>
+</html>
