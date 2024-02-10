@@ -294,8 +294,8 @@ io.on('connection', (socket) => {
             const userLatitude = latitude;
             const userLongitude = longitude;
 
-             const targetLatitude = 10.9791;
-             const targetLongitude = 26.7426;
+             const targetLatitude = -10.978;
+             const targetLongitude = 26.742;
              //const radius = 0.05; // 50 meters radius
              const radius = 1000; // 1km radius
 
@@ -447,8 +447,9 @@ io.on('connection', (socket) => {
               const userLatitude = latitude;
               const userLongitude = longitude;
 
-              const targetLatitude = 10.9791;
-              const targetLongitude = 26.7426;
+
+              const targetLatitude = -10.978;
+              const targetLongitude = 26.742;
               //const radius = 0.05; // 50 meters radius
               const radius = 1000; // 1km radius
 
