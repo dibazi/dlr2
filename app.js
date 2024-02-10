@@ -294,11 +294,10 @@ io.on('connection', (socket) => {
             const userLatitude = latitude;
             const userLongitude = longitude;
 
-             // MFP location accurate
-             const targetLatitude = -26.06181;
-             const targetLongitude = 28.08786;
+             const targetLatitude = 10.9791;
+             const targetLongitude = 26.7426;
              //const radius = 0.05; // 50 meters radius
-             const radius = 2000; // 2km radius
+             const radius = 1000; // 1km radius
 
              function isWithinRadius(latitude, longitude, targetLatitude, targetLongitude, radius) {
               const distance = geolib.getDistance(
@@ -448,11 +447,10 @@ io.on('connection', (socket) => {
               const userLatitude = latitude;
               const userLongitude = longitude;
 
-              // MFP location accurate
-              const targetLatitude = -26.06181;
-              const targetLongitude = 28.08786;
-              //const radius = 100; // 100 meters radius
-              const radius = 2000; // 2km radius
+              const targetLatitude = 10.9791;
+              const targetLongitude = 26.7426;
+              //const radius = 0.05; // 50 meters radius
+              const radius = 1000; // 1km radius
 
               // MFP location
               // const targetLatitude = -26.08581;
