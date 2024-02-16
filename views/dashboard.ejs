@@ -87,7 +87,11 @@
     <!-- Header -->
     <header>
       <nav class="container flex items-center py-4 mt-4 sm:mt-12">
-        <div class="py-1"><%= user.user_name %></div>
+        <div class="py-1"><%= user.user_name %> 
+          <br> <h2 id="current_user_lat_id"></h2>
+         
+          <br><h2 id="current_user_long_id"></h2>
+        </div>
       
         <!-- Dropdown menu -->
         <div class="relative ml-auto sm:hidden">
@@ -139,6 +143,8 @@
           <!-- Heading -->
           <div class="sm:w-3/4 lg:w-5/12 mx-auto px-2">
             <h1 class="text-3xl text-center text-bookmark-blue">Click to check out </h1>
+            <h2 id="current_user_lat_id"></h2>
+            <h2 id="current_user_long_id"></h2>
           </div>
             <!-- FAQ Items -->
 
@@ -303,12 +309,43 @@
       //     return doc.documentElement.textContent;
       // }
 
-         console.log("heyyyy");
+         console.log("messi 2");
           socket.on('checkInUsers', (data) => {
-            console.log("heyyyy 2");
+            console.log("dalin");
                 console.log(data);
 
           })
+
+
+
+          document.addEventListener("DOMContentLoaded", function(event) {
+                  getGeolocation_();
+              });
+
+              function getGeolocation_() {
+                console.log("geo")
+                  if (navigator.geolocation) {
+                      navigator.geolocation.getCurrentPosition(
+                          function (position) {
+                              var latitude_server = position.coords.latitude;
+                              var longitude_server = position.coords.longitude;
+                              
+                              // Display the latitude and longitude values in the HTML
+                              document.getElementById("current_user_lat_id").textContent = "Latitude: " + latitude_server;
+                              document.getElementById("current_user_long_id").textContent = "Longitude: " + longitude_server;
+                          },
+                          function (error) {
+                              console.error('Error occurred. Error code: ' + error.code + ' - ' + error.message);
+                          }
+                      );
+                  } else {
+                      console.error('Geolocation is not supported by this browser.');
+                  }
+              }
+
+
+
+
 
     function getGeolocation_on_button_click(event) {
       event.preventDefault();
@@ -317,6 +354,9 @@
           function (position) {
           var latitude_server = position.coords.latitude;
           var longitude_server = position.coords.longitude;
+
+          console.log("lat: ",latitude_server)
+          console.log("long: ",longitude_server)
 
         // Display the latitude and longitude values in the HTML
         // document.getElementById("latitude_show").textContent = latitude_server;
